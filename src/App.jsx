@@ -13,6 +13,7 @@ import {
   AirtableProvider,
   useAirtableContext,
 } from "./context/AirtableContext";
+import CompaniesPage from "./pages/CompaniesPage";
 import EventsPage from "./pages/EventsPage";
 import FunnelPage from "./pages/FunnelPage";
 import ConfigPage from "./pages/ConfigPage";
@@ -22,6 +23,7 @@ import { urlOf } from "./utils/deploymentUtils";
 const { Header, Content } = Layout;
 
 const menuItems = [
+  { key: "companies", label: <Link to={urlOf("companies")}>Companies</Link> },
   { key: "events", label: <Link to={urlOf("events")}>Events</Link> },
   { key: "funnel", label: <Link to={urlOf("funnel")}>Funnel</Link> },
   { key: "config", label: <Link to={urlOf("config")}>Config</Link> },
@@ -67,6 +69,7 @@ const AppContent = () => {
               />
             }
           />
+          <Route path={urlOf("companies")} element={<CompaniesPage />} />
           <Route path={urlOf("events")} element={<EventsPage />} />
           <Route path={urlOf("funnel")} element={<FunnelPage />} />
           <Route path={urlOf("config")} element={<ConfigPage />} />
