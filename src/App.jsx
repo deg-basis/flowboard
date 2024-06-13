@@ -6,27 +6,40 @@ import {
   Routes,
   Link,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 
 import "./App.css";
+import { AirtableProvider, useAirtable } from "./context/AirtableContext";
 import EventsPage from "./pages/EventsPage";
 import FunnelPage from "./pages/FunnelPage";
 import ConfigPage from "./pages/ConfigPage";
 import HelpPage from "./pages/HelpPage";
+import { urlOf } from "./utils/deploymentUtils";
 
 const { Header, Content } = Layout;
 
-const urlOf = (page) => `/flowboard/${page}`;
-
 const menuItems = [
-  { key: "1", label: <Link to={urlOf("events")}>Events</Link> },
-  { key: "2", label: <Link to={urlOf("funnel")}>Funnel</Link> },
-  { key: "3", label: <Link to={urlOf("config")}>Config</Link> },
-  { key: "4", label: <Link to={urlOf("help")}>Help</Link> },
+  { key: "events", label: <Link to={urlOf("events")}>Events</Link> },
+  { key: "funnel", label: <Link to={urlOf("funnel")}>Funnel</Link> },
+  { key: "config", label: <Link to={urlOf("config")}>Config</Link> },
+  { key: "help", label: <Link to={urlOf("help")}>Help</Link> },
 ];
 
-const App = () => (
-  <Router>
+const AppContent = () => {
+  const { airtableToken, initializing } = useAirtable();
+  const location = useLocation();
+
+  if (initializing) {
+    return null;
+  }
+
+  const basePath = urlOf("").replace(/\/$/, "");
+  const relativePath = location.pathname.replace(basePath, "");
+  const selectedKey =
+    relativePath.split("/")[1] || (airtableToken ? "funnel" : "config");
+
+  return (
     <Layout style={{ height: "100vh" }}>
       <Header className="header">
         <div className="logo">
@@ -36,13 +49,21 @@ const App = () => (
             style={{ height: "31px", margin: "16px 24px 16px 0" }}
           />
         </div>
-        <Menu mode="horizontal" defaultSelectedKeys={["3"]} items={menuItems} />
+        <Menu
+          mode="horizontal"
+          selectedKeys={[selectedKey]}
+          items={menuItems}
+        />
       </Header>
       <Content style={{ marginTop: 64, padding: "0 24px", background: "#fff" }}>
         <Routes>
           <Route
             path={urlOf("")}
-            element={<Navigate to="/flowboard/config" />}
+            element={
+              <Navigate
+                to={airtableToken ? urlOf("funnel") : urlOf("config")}
+              />
+            }
           />
           <Route path={urlOf("events")} element={<EventsPage />} />
           <Route path={urlOf("funnel")} element={<FunnelPage />} />
@@ -51,7 +72,15 @@ const App = () => (
         </Routes>
       </Content>
     </Layout>
-  </Router>
+  );
+};
+
+const App = () => (
+  <AirtableProvider>
+    <Router>
+      <AppContent />
+    </Router>
+  </AirtableProvider>
 );
 
 export default App;
