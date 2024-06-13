@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useAirtable } from "../context/AirtableContext";
+import { useState } from "react";
+import { useAirtableContext } from "../context/AirtableContext";
 import { useNavigate } from "react-router-dom";
 import { urlOf } from "../utils/deploymentUtils";
 
 const ConfigPage = () => {
-  const { airtableToken, updateAirtableToken } = useAirtable();
+  const { airtableToken, updateAirtableToken } = useAirtableContext();
   const [token, setToken] = useState(airtableToken || "");
   const navigate = useNavigate();
 

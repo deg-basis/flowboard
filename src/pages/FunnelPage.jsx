@@ -1,5 +1,3 @@
-import React from "react";
-
 const FunnelPage = () => (
   <div>
     <h1>Funnel</h1>

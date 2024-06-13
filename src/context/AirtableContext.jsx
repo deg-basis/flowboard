@@ -1,13 +1,11 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
+import PropTypes from "prop-types";
+import { obfuscate, deobfuscate } from "../utils/trivialObfuscation";
 
 const AirtableContext = createContext();
 
-export const useAirtable = () => useContext(AirtableContext);
-
-// Trivial obfuscation.
-// [TODO] Good enough, since only on user's local machine?
-const encodeToken = (token) => btoa(token);
-const decodeToken = (encodedToken) => atob(encodedToken);
+/* eslint-disable-next-line react-refresh/only-export-components */
+export const useAirtableContext = () => useContext(AirtableContext);
 
 export const AirtableProvider = ({ children }) => {
   const [airtableToken, setAirtableToken] = useState("");
@@ -16,13 +14,13 @@ export const AirtableProvider = ({ children }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("airtableToken");
     if (storedToken) {
-      setAirtableToken(decodeToken(storedToken));
+      setAirtableToken(deobfuscate(storedToken));
     }
     setInitializing(false);
   }, []);
 
   const updateAirtableToken = (token) => {
-    const encodedToken = encodeToken(token);
+    const encodedToken = obfuscate(token);
     setAirtableToken(token);
     localStorage.setItem("airtableToken", encodedToken);
   };
@@ -34,4 +32,8 @@ export const AirtableProvider = ({ children }) => {
       {children}
     </AirtableContext.Provider>
   );
+};
+
+AirtableProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import { Layout, Menu } from "antd";
 import {
   BrowserRouter as Router,
@@ -10,7 +9,10 @@ import {
 } from "react-router-dom";
 
 import "./App.css";
-import { AirtableProvider, useAirtable } from "./context/AirtableContext";
+import {
+  AirtableProvider,
+  useAirtableContext,
+} from "./context/AirtableContext";
 import EventsPage from "./pages/EventsPage";
 import FunnelPage from "./pages/FunnelPage";
 import ConfigPage from "./pages/ConfigPage";
@@ -27,7 +29,7 @@ const menuItems = [
 ];
 
 const AppContent = () => {
-  const { airtableToken, initializing } = useAirtable();
+  const { airtableToken, initializing } = useAirtableContext();
   const location = useLocation();
 
   if (initializing) {
