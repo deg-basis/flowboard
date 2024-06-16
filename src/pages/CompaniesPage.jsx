@@ -19,7 +19,6 @@ const schema = {
     "Organization Type": "singleSelect",
     Headquarters: "text",
     Investor: "checkbox",
-    Notes: "multilineText",
     Interests: "multipleSelect",
     "BT Invest Status": "singleSelect",
     "Portfolio Logo Permission": "checkbox",
@@ -29,6 +28,7 @@ const schema = {
     Accelerator: "ignore",
     "(legacy) Funnel": "ignore",
     "To Company (for Fillout)": "ignore",
+    "Legacy Notes": "multilineText",
     "Company notes": ["record", "Company notes"],
   },
 };
@@ -67,34 +67,60 @@ const CompaniesPage = () => {
     return <Spin />;
   }
 
+  const getSorter = (type, key) => {
+    switch (Array.isArray(type) ? type[0] : type) {
+      case "text":
+      case "multilineText":
+      case "URL":
+      case "singleSelect":
+        return (a, b) => {
+          const valA = a.fields[key] || "";
+          const valB = b.fields[key] || "";
+          return valA.localeCompare(valB);
+        };
+      case "record":
+        return (a, b) => {
+          const valA = a.fields[key]?.[0] || "";
+          const valB = b.fields[key]?.[0] || "";
+          return valA.localeCompare(valB);
+        };
+      case "checkbox":
+        return (a, b) => {
+          const valA = a.fields[key] ? 1 : 0;
+          const valB = b.fields[key] ? 1 : 0;
+          return valA - valB;
+        };
+      case "button":
+      case "image":
+      default:
+        return null;
+    }
+  };
+
   const fieldColumns = Object.keys(schema[tableName])
     .filter((key) => schema[tableName][key] !== "ignore")
-    .map((key) => ({
-      title: key,
-      dataIndex: ["fields", key],
-      key: key,
-      render: (value) =>
-        value ? (
-          <AirtableField
-            cellKey={key}
-            type={schema[tableName][key]}
-            value={value}
-          />
-        ) : (
-          () => ""
-        ),
-    }));
+    .map((key) => {
+      const type = schema[tableName][key];
+      return {
+        title: key,
+        dataIndex: ["fields", key],
+        key: key,
+        sorter: getSorter(type, key),
+        render: (value) =>
+          value ? <AirtableField type={type} value={value} /> : () => "",
+      };
+    });
+
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      sorter: (a, b) => a.id.localeCompare(b.id),
       render: (value) => <AirtableRecordId tableName="Companies" id={value} />,
     },
     ...fieldColumns,
   ];
-
-  console.log("Columns", columns);
 
   return (
     <div>

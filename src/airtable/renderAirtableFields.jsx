@@ -73,8 +73,8 @@ AirtableImage.propTypes = {
     }),
   ).isRequired,
 };
-export const AirtableField = ({ cellKey, type, value }) => {
-  console.log(`Rendering field: key=${cellKey}, type=${type}, value=`, value);
+
+export const AirtableField = ({ type, value }) => {
   if (Array.isArray(type)) {
     if (type[0] == "record") {
       return <AirtableRecordId tableName={type[1]} id={value} />;
