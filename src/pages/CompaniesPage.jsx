@@ -3,8 +3,35 @@ import { Typography, Alert, Spin, Table } from "antd";
 
 import { useAirtableContext } from "../context/AirtableContext";
 import fetchAirtableData from "../airtable/fetchAirtableData";
+import AirtableField, {
+  AirtableRecordId,
+} from "../airtable/renderAirtableFields";
 
 const { Title } = Typography;
+
+const schema = {
+  Companies: {
+    "Update Record": "button",
+    "Primary Contact": ["record", "People"],
+    "Home Page": "URL",
+    Tagline: "text",
+    Crunchbase: "URL",
+    "Organization Type": "singleSelect",
+    Headquarters: "text",
+    Investor: "checkbox",
+    Notes: "multilineText",
+    Interests: "multipleSelect",
+    "BT Invest Status": "singleSelect",
+    "Portfolio Logo Permission": "checkbox",
+    "Logo URL": "URL",
+    Logo: "image",
+    "Listed on BasisTech Website": "checkbox",
+    Accelerator: "ignore",
+    "(legacy) Funnel": "ignore",
+    "To Company (for Fillout)": "ignore",
+    "Company notes": ["record", "Company notes"],
+  },
+};
 
 const CompaniesPage = () => {
   const baseId = "appuwUqhc3geVVy1v";
@@ -37,34 +64,37 @@ const CompaniesPage = () => {
   }
 
   if (!data) {
-    return <Spin tip="Loading..." />;
+    return <Spin />;
   }
 
+  const fieldColumns = Object.keys(schema[tableName])
+    .filter((key) => schema[tableName][key] !== "ignore")
+    .map((key) => ({
+      title: key,
+      dataIndex: ["fields", key],
+      key: key,
+      render: (value) =>
+        value ? (
+          <AirtableField
+            cellKey={key}
+            type={schema[tableName][key]}
+            value={value}
+          />
+        ) : (
+          () => ""
+        ),
+    }));
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      render: (value) => <AirtableRecordId tableName="Companies" id={value} />,
     },
-    {
-      title: "Company",
-      dataIndex: ["fields", "Company"],
-      key: "company",
-    },
-    {
-      title: "Created Time",
-      dataIndex: "createdTime",
-      key: "createdTime",
-    },
-    {
-      title: "Update Record",
-      dataIndex: ["fields", "Update Record"],
-      key: "updateRecord",
-      render: (updateRecord) => (
-        <a href={updateRecord.url}>{updateRecord.label}</a>
-      ),
-    },
+    ...fieldColumns,
   ];
+
+  console.log("Columns", columns);
 
   return (
     <div>
