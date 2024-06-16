@@ -44,12 +44,12 @@ const CompaniesPage = () => {
     const fetchData = async () => {
       if (airtableToken) {
         try {
-          const result = await fetchAirtableData(
+          const records = await fetchAirtableData(
             airtableToken,
             baseId,
             tableName,
           );
-          setData(result.records);
+          setData(records);
         } catch (err) {
           setError(err.message);
         }
