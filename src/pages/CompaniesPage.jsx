@@ -11,6 +11,7 @@ const { Title } = Typography;
 
 const schema = {
   Companies: {
+    Company: "text",
     "Update Record": "button",
     "Primary Contact": ["record", "People"],
     "Home Page": "URL",
