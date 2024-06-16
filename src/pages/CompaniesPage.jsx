@@ -40,6 +40,19 @@ const CompaniesPage = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 20,
+    },
+  });
+  const handleTableChange = (pagination, filters, sorter) => {
+    setTableParams({
+      pagination,
+      filters,
+      ...sorter,
+    });
+  };
   useEffect(() => {
     const fetchData = async () => {
       if (airtableToken) {
@@ -125,7 +138,13 @@ const CompaniesPage = () => {
   return (
     <div>
       <Title level={1}>Companies</Title>
-      <Table dataSource={data} columns={columns} rowKey="id" />
+      <Table
+        dataSource={data}
+        columns={columns}
+        rowKey="id"
+        pagination={tableParams.pagination}
+        onChange={handleTableChange}
+      />
     </div>
   );
 };
