@@ -3,6 +3,21 @@
 So far, this is just a skeleton of a toy.
 
 
+# Startup
+
+*Development*
+
+```
+yarn dev
+```
+
+*Deployment*
+
+```
+yarn build && yarn deploy
+```
+
+
 # Credentials
 
 To obtain your Airtable API token, follow these steps:
