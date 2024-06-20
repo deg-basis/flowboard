@@ -30,6 +30,9 @@ const menuItems = [
   { key: "help", label: <Link to={urlOf("help")}>Help</Link> },
 ];
 
+const lacksCredentialsDefaultPage = "config";
+const hasCredentialsDefaultPage = "companies";
+
 const AppContent = () => {
   const { airtableToken, initializing } = useAirtableContext();
   const location = useLocation();
@@ -41,7 +44,8 @@ const AppContent = () => {
   const basePath = urlOf("").replace(/\/$/, "");
   const relativePath = location.pathname.replace(basePath, "");
   const selectedKey =
-    relativePath.split("/")[1] || (airtableToken ? "funnel" : "config");
+    relativePath.split("/")[1] ||
+    (airtableToken ? hasCredentialsDefaultPage : lacksCredentialsDefaultPage);
 
   return (
     <Layout style={{ height: "100vh" }}>
@@ -65,7 +69,11 @@ const AppContent = () => {
             path={urlOf("")}
             element={
               <Navigate
-                to={airtableToken ? urlOf("funnel") : urlOf("config")}
+                to={
+                  airtableToken
+                    ? urlOf(hasCredentialsDefaultPage)
+                    : urlOf(lacksCredentialsDefaultPage)
+                }
               />
             }
           />
