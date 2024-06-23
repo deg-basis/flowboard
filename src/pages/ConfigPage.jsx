@@ -6,6 +6,9 @@ import { urlOf } from "../utils/deploymentUtils";
 
 const { Title } = Typography;
 
+export const lacksCredentialsDefaultPage = "config";
+export const hasCredentialsDefaultPage = "companies";
+
 const ConfigPage = () => {
   const { airtableToken, updateAirtableToken } = useAirtableContext();
   const [token, setToken] = useState("");
@@ -17,7 +20,7 @@ const ConfigPage = () => {
 
   const handleSubmit = () => {
     updateAirtableToken(token);
-    navigate(urlOf("funnel"));
+    navigate(urlOf(hasCredentialsDefaultPage));
   };
 
   return (

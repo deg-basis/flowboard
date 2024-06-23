@@ -16,7 +16,10 @@ import {
 import CompaniesPage from "./pages/CompaniesPage";
 import EventsPage from "./pages/EventsPage";
 import FunnelPage from "./pages/FunnelPage";
-import ConfigPage from "./pages/ConfigPage";
+import ConfigPage, {
+  lacksCredentialsDefaultPage,
+  hasCredentialsDefaultPage,
+} from "./pages/ConfigPage";
 import HelpPage from "./pages/HelpPage";
 import { urlOf } from "./utils/deploymentUtils";
 
@@ -29,9 +32,6 @@ const menuItems = [
   { key: "config", label: <Link to={urlOf("config")}>Config</Link> },
   { key: "help", label: <Link to={urlOf("help")}>Help</Link> },
 ];
-
-const lacksCredentialsDefaultPage = "config";
-const hasCredentialsDefaultPage = "companies";
 
 const AppContent = () => {
   const { airtableToken, initializing } = useAirtableContext();
