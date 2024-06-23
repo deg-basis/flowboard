@@ -52,6 +52,13 @@ AirtableButton.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
+export const AirtableEmail = ({ email }) => (
+  <a href={`mailto:${email}`}>{email}</a>
+);
+AirtableEmail.propTypes = {
+  email: PropTypes.string.isRequired,
+};
+
 export const AirtableUrl = ({ url }) => (
   <a href={url} target="_blank" rel="noopener noreferrer">
     {url}
@@ -85,6 +92,8 @@ export const AirtableField = ({ type, value }) => {
       return "";
     case "URL":
       return <AirtableUrl url={value} />;
+    case "email":
+      return <AirtableEmail email={value} />;
     case "button":
       return <AirtableButton url={value?.url} label={value?.label} />;
     case "image":
