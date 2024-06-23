@@ -25,7 +25,7 @@ export const AirtableRecordId = ({ id, tableName }) => {
   useEffect(() => {
     const fetchData = async () => {
       const records = await getTable({ tableName, setError });
-      setRecords(await getTable({ tableName, setError }));
+      setRecords(records);
     };
 
     fetchData();
