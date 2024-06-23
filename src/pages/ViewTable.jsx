@@ -42,6 +42,13 @@ const schema = {
     "Legacy Notes": "multilineText",
     "Company notes": ["record", "Company notes"],
   },
+  Events: {
+    Name: "text",
+    Date: "date",
+    Description: "multilineText",
+    Status: "singleSelect",
+    Speakers: ["record", "People"],
+  },
 };
 
 const ViewTable = ({ baseId = "appuwUqhc3geVVy1v", tableName }) => {

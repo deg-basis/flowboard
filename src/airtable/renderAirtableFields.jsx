@@ -68,6 +68,19 @@ AirtableUrl.propTypes = {
   url: PropTypes.string.isRequired,
 };
 
+export const AirtableDate = ({ date }) => {
+  const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return <span>{formattedDate}</span>;
+};
+AirtableDate.propTypes = {
+  date: PropTypes.string.isRequired,
+};
+
 const AirtableImage = ({ attachments }) => {
   const image = attachments?.[0];
   return <Image src={image.url} alt={image.filename} width={"160px"} />;
@@ -96,6 +109,8 @@ export const AirtableField = ({ type, value }) => {
       return <AirtableEmail email={value} />;
     case "button":
       return <AirtableButton url={value?.url} label={value?.label} />;
+    case "date":
+      return <AirtableDate date={value} />;
     case "image":
       return <AirtableImage attachments={value} />;
     case "text":
@@ -110,7 +125,7 @@ export const AirtableField = ({ type, value }) => {
       return <AirtableCheckbox checked={value} />;
     default:
       console.error(`Can't handle type {type} for`, value);
-      return <span>JSON.stringify(value) </span>;
+      return <span>{JSON.stringify(value)} </span>;
   }
 };
 
