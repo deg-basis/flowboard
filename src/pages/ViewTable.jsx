@@ -51,8 +51,8 @@ const schema = {
   },
 };
 
-const ViewTable = ({ baseId = "appuwUqhc3geVVy1v", tableName }) => {
-  const { airtableToken } = useAirtableContext();
+const ViewTable = ({ tableName }) => {
+  const { getTable } = useAirtableContext();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -70,23 +70,13 @@ const ViewTable = ({ baseId = "appuwUqhc3geVVy1v", tableName }) => {
     });
   };
   useEffect(() => {
+    // [TODO] Prevent double fetch in React StrictMode
     const fetchData = async () => {
-      if (airtableToken) {
-        try {
-          const records = await fetchAirtableData(
-            airtableToken,
-            baseId,
-            tableName,
-          );
-          setData(records);
-        } catch (err) {
-          setError(err.message);
-        }
-      }
+      setData(await getTable({ tableName, setError }));
     };
 
     fetchData();
-  }, [airtableToken, baseId, tableName]);
+  }, [getTable, tableName]);
 
   if (error) {
     return <Alert message="Error" description={error} type="error" showIcon />;
@@ -153,7 +143,7 @@ const ViewTable = ({ baseId = "appuwUqhc3geVVy1v", tableName }) => {
 
   return (
     <div>
-      <Title level={1}>Companies</Title>
+      <Title level={1}>{tableName}</Title>
       <Table
         dataSource={data}
         columns={columns}

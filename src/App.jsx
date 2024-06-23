@@ -49,6 +49,7 @@ const AppContent = () => {
   const location = useLocation();
 
   if (initializing) {
+    // Avoid double-reload or premature render in React.StrictMode
     return null;
   }
 

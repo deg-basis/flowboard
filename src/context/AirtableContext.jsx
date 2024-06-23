@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
+import fetchAirtableData from "../airtable/fetchAirtableData";
 import { obfuscate, deobfuscate } from "../utils/trivialObfuscation";
 
 const AirtableContext = createContext();
@@ -8,7 +9,9 @@ const AirtableContext = createContext();
 export const useAirtableContext = () => useContext(AirtableContext);
 
 export const AirtableProvider = ({ children }) => {
+  const baseId = "appuwUqhc3geVVy1v";
   const [airtableToken, setAirtableToken] = useState("");
+  const [cachedTables, setCachedTables] = useState({});
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
@@ -25,9 +28,35 @@ export const AirtableProvider = ({ children }) => {
     localStorage.setItem("airtableToken", encodedToken);
   };
 
+  const getTable = async ({ tableName, setError, cachedOk = true }) => {
+    if (!cachedOk || !cachedTables[tableName]) {
+      if (airtableToken) {
+        try {
+          const records = await fetchAirtableData(
+            airtableToken,
+            baseId,
+            tableName,
+          );
+          setCachedTables((prev) => ({ ...prev, [tableName]: records }));
+        } catch (err) {
+          setError(err.message);
+        }
+      } else {
+        setError("Missing Airtable access token");
+      }
+    }
+    return cachedTables[tableName];
+  };
+
   return (
     <AirtableContext.Provider
-      value={{ airtableToken, updateAirtableToken, initializing }}
+      value={{
+        airtableToken,
+        updateAirtableToken,
+        baseId,
+        initializing,
+        getTable,
+      }}
     >
       {children}
     </AirtableContext.Provider>
