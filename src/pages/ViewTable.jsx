@@ -70,7 +70,6 @@ const ViewTable = ({ tableName }) => {
     });
   };
   useEffect(() => {
-    // [TODO] Prevent double fetch in React StrictMode
     const fetchData = async () => {
       setData(await getTable({ tableName, setError }));
     };

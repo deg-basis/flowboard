@@ -1,21 +1,68 @@
+import { useEffect, useState } from "react";
 import { Button, Image, Tag } from "antd";
-
 import PropTypes from "prop-types";
 
-const AirtableText = ({ text }) => <span>{text}</span>;
+import { useAirtableContext } from "../context/AirtableContext";
+
+const AirtableText = ({ text }) => {
+  // [TODO] Array case is for lookup of Roles in People.  Clean up!
+  if (Array.isArray(text)) {
+    return <span>{text.join(", ")}</span>;
+  }
+  return <span>{text}</span>;
+};
 AirtableText.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
 };
 
 export const AirtableRecordId = ({ id, tableName }) => {
-  return (
-    <Tag color="orange">
-      {tableName}: {id}
-    </Tag>
-  );
+  const { getTable } = useAirtableContext();
+  const [error, setError] = useState(null);
+  const [records, setRecords] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const records = await getTable({ tableName, setError });
+      setRecords(await getTable({ tableName, setError }));
+    };
+
+    fetchData();
+  }, [getTable, tableName]);
+
+  if (!records.length) {
+    return "";
+  }
+
+  const OneTag = ({ id }) => {
+    const record = records.find((r) => {
+      return r.id === id;
+    });
+    return (
+      <Tag color="orange">
+        {
+          //[TODO] Standardize Name fields. Probably means fixing existing
+          //automations and interfaces
+          record?.fields["Name"] ||
+            record?.fields["Record Key"] ||
+            record?.fields["Company"] ||
+            // [TODO] id case is for rollup of Companies in People.  Clean up!
+            id
+        }
+      </Tag>
+    );
+  };
+
+  if (Array.isArray(id)) {
+    return id.map((r) => <OneTag key={r} id={r} />);
+  } else return <OneTag id={id} />;
 };
 AirtableRecordId.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
   tableName: PropTypes.string.isRequired,
 };
 

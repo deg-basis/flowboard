@@ -13,6 +13,7 @@ export const AirtableProvider = ({ children }) => {
   const [airtableToken, setAirtableToken] = useState("");
   const [cachedTables, setCachedTables] = useState({});
   const [initializing, setInitializing] = useState(true);
+  const fetchPromises = {}; // To track ongoing fetch operations
 
   useEffect(() => {
     const storedToken = localStorage.getItem("airtableToken");
@@ -29,23 +30,41 @@ export const AirtableProvider = ({ children }) => {
   };
 
   const getTable = async ({ tableName, setError, cachedOk = true }) => {
-    if (!cachedOk || !cachedTables[tableName]) {
-      if (airtableToken) {
-        try {
-          const records = await fetchAirtableData(
-            airtableToken,
-            baseId,
-            tableName,
-          );
-          setCachedTables((prev) => ({ ...prev, [tableName]: records }));
-        } catch (err) {
-          setError(err.message);
-        }
-      } else {
-        setError("Missing Airtable access token");
-      }
+    if (cachedOk && cachedTables[tableName]) {
+      return cachedTables[tableName];
     }
-    return cachedTables[tableName];
+
+    if (fetchPromises[tableName]) {
+      // If there's already an ongoing fetch for this table, wait for it
+      return fetchPromises[tableName];
+    }
+
+    if (airtableToken) {
+      try {
+        console.log("Fetching", tableName);
+        fetchPromises[tableName] = fetchAirtableData(
+          airtableToken,
+          baseId,
+          tableName,
+        )
+          .then((records) => {
+            setCachedTables((prev) => ({ ...prev, [tableName]: records }));
+            delete fetchPromises[tableName];
+            return records;
+          })
+          .catch((err) => {
+            setError(err.message);
+            delete fetchPromises[tableName];
+            throw err;
+          });
+
+        return fetchPromises[tableName];
+      } catch (err) {
+        setError(err.message);
+      }
+    } else {
+      setError("Missing Airtable access token");
+    }
   };
 
   return (
