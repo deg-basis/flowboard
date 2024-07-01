@@ -1,13 +1,46 @@
 import { useState, useEffect } from "react";
-import { Form, Input, Button, List, Typography, Divider } from "antd";
+import { Form, Input, Button, Typography, Divider } from "antd";
 import { useAirtableContext } from "../context/AirtableContext";
 import { useNavigate } from "react-router-dom";
 import { urlOf } from "../utils/deploymentUtils";
+
+import Markdown from "../components/Markdown";
 
 const { Title } = Typography;
 
 export const lacksCredentialsDefaultPage = "config";
 export const hasCredentialsDefaultPage = "companies";
+
+const markdownContent = `
+## Config
+
+### To obtain your Airtable API token, follow these steps:
+
+#### Log in to Airtable:
+
+* Go to [Airtable](https://airtable.com/) and log in with your credentials.
+
+#### Navigate to the Developer Hub:
+
+* Click on your profile picture or initials in the top-right corner of the
+  Airtable interface.
+* Select “Developer hub” from the dropdown menu.
+
+#### Generate a Personal Access Token:
+
+* In the Developer Hub, find the section for Personal Access Tokens.
+* Click on “Generate token” or a similar button.
+* Follow the prompts to create a new Personal Access Token, specifying the
+  scopes and bases you want to grant access to.
+* Copy the generated token. This is your Personal Access Token.
+
+
+#### Save your token here:
+
+* Paste the token below.
+* Click “Save Token”.
+* Note that this will only save the token locally in your browser.
+`;
 
 const ConfigPage = () => {
   const { airtableToken, updateAirtableToken } = useAirtableContext();
@@ -25,11 +58,7 @@ const ConfigPage = () => {
 
   return (
     <div>
-      <Title level={1}>Config</Title>
-      <Title level={3}>
-        To obtain your Airtable API token, follow these steps:
-      </Title>
-      <Instructions />
+      <Markdown markdown={markdownContent} />
       <Divider />
       <Title level={3}>Enter token now:</Title>
       <Form
@@ -59,55 +88,5 @@ const ConfigPage = () => {
     </div>
   );
 };
-
-const Instructions = () => (
-  <div>
-    <List
-      dataSource={[
-        {
-          title: "Log in to Airtable:",
-          steps: ["Go to Airtable and log in with your credentials."],
-        },
-        {
-          title: "Navigate to the Developer Hub:",
-          steps: [
-            "Click on your profile picture or initials in the top-right corner of the Airtable interface.",
-            "Select “Developer hub” from the dropdown menu.",
-          ],
-        },
-        {
-          title: "Generate a Personal Access Token:",
-          steps: [
-            "In the Developer Hub, find the section for Personal Access Tokens.",
-            "Click on “Generate token” or a similar button.",
-            "Follow the prompts to create a new Personal Access Token, specifying the scopes and bases you want to grant access to.",
-            "Copy the generated token. This is your Personal Access Token.",
-          ],
-        },
-        {
-          title: "Save your token here:",
-          steps: [
-            "Paste the token below.",
-            "Click “Save Token”.",
-            "Note that this will only save the token locally in your browser.",
-          ],
-        },
-      ]}
-      renderItem={(item) => (
-        <List.Item>
-          <List.Item.Meta
-            title={item.title}
-            description={
-              <List
-                dataSource={item.steps}
-                renderItem={(step) => <List.Item>{step}</List.Item>}
-              />
-            }
-          />
-        </List.Item>
-      )}
-    />
-  </div>
-);
 
 export default ConfigPage;
