@@ -39,6 +39,12 @@ export const AirtableRecordId = ({ id, tableName }) => {
     const record = records.find((r) => {
       return r.id === id;
     });
+    const updater = record?.fields?.["Update Record"];
+    if (updater) {
+      return (
+        <AirtableButton url={updater.url} label={record.fields.Name || "???"} />
+      );
+    }
     return (
       <Tag color="orange">
         {

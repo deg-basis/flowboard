@@ -21,8 +21,7 @@ const schema = {
     Crunchbase: "URL",
   },
   Companies: {
-    Company: "text",
-    "Update Record": "button",
+    Name: "text",
     "Primary Contact": ["record", "People"],
     "Home Page": "URL",
     Tagline: "text",
