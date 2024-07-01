@@ -11,42 +11,42 @@ const { Title } = Typography;
 
 const schema = {
   People: {
-    "First Name": "text",
-    "Last Name": "text",
-    Email: "email",
-    Companies: ["record", "Companies"],
-    Role: "text",
-    Tags: "multipleSelect",
-    LinkedIn: "URL",
-    Crunchbase: "URL",
+    "First Name": { type: "text" },
+    "Last Name": { type: "text" },
+    Email: { type: "email" },
+    Companies: { type: ["record", "Companies"] },
+    Role: { type: "text" },
+    Tags: { type: "multipleSelect" },
+    LinkedIn: { type: "URL", prettyHeading: "LinkedIn URL" },
+    Crunchbase: { type: "URL", prettyHeading: "Crunchbase URL" },
   },
   Companies: {
-    Name: "text",
-    "Primary Contact": ["record", "People"],
-    "Home Page": "URL",
-    Tagline: "text",
-    Crunchbase: "URL",
-    "Organization Type": "singleSelect",
-    Headquarters: "text",
-    Investor: "checkbox",
-    Interests: "multipleSelect",
-    "BT Invest Status": "singleSelect",
-    "Portfolio Logo Permission": "checkbox",
-    "Logo URL": "URL",
-    Logo: "image",
-    "Listed on BasisTech Website": "checkbox",
-    Accelerator: "ignore",
-    "(legacy) Funnel": "ignore",
-    "To Company (for Fillout)": "ignore",
-    "Legacy Notes": "multilineText",
-    "Company notes": ["record", "Company notes"],
+    Name: { type: "text", prettyHeading: "Company Name" },
+    "Primary Contact": { type: ["record", "People"] },
+    "Home Page": { type: "URL" },
+    Tagline: { type: "text" },
+    Crunchbase: { type: "URL", prettyHeading: "Crunchbase URL" },
+    "Organization Type": { type: "singleSelect" },
+    Headquarters: { type: "text" },
+    Investor: { type: "checkbox" },
+    Interests: { type: "multipleSelect" },
+    "BT Invest Status": { type: "singleSelect" },
+    "Portfolio Logo Permission": { type: "checkbox" },
+    "Logo URL": { type: "URL" },
+    Logo: { type: "image" },
+    "Listed on BasisTech Website": { type: "checkbox" },
+    Accelerator: { type: "ignore" },
+    "(legacy) Funnel": { type: "ignore" },
+    "To Company (for Fillout)": { type: "ignore" },
+    "Legacy Notes": { type: "multilineText" },
+    "Company notes": { type: ["record", "Company notes"] },
   },
   Events: {
-    Name: "text",
-    Date: "date",
-    Description: "multilineText",
-    Status: "singleSelect",
-    Speakers: ["record", "People"],
+    Name: { type: "text" },
+    Date: { type: "date" },
+    Description: { type: "multilineText" },
+    Status: { type: "singleSelect" },
+    Speakers: { type: ["record", "People"] },
   },
 };
 
@@ -117,9 +117,10 @@ const ViewTable = ({ tableName }) => {
   const fieldColumns = Object.keys(schema[tableName])
     .filter((key) => schema[tableName][key] !== "ignore")
     .map((key) => {
-      const type = schema[tableName][key];
+      const type = schema[tableName][key].type;
+      const title = schema[tableName][key].prettyHeading || key;
       return {
-        title: key,
+        title,
         dataIndex: ["fields", key],
         key: key,
         sorter: getSorter(type, key),
@@ -130,7 +131,7 @@ const ViewTable = ({ tableName }) => {
 
   const columns = [
     {
-      title: "ID",
+      title: "Update/Actions",
       dataIndex: "id",
       key: "id",
       sorter: (a, b) => a.id.localeCompare(b.id),
