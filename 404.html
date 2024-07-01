@@ -4,10 +4,13 @@
   <meta charset="utf-8">
   <title>Page Not Found</title>
   <script type="text/javascript">
-    var basePath = window.location.pathname.includes('/flowboard') ? '/flowboard' : '';
-    var pathname = window.location.pathname.replace(basePath, '');
+    var isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    var basePath = isLocalhost ? '' : '/flowboard';
+    var pathname = window.location.pathname;
     var newUrl = basePath + pathname + window.location.search + window.location.hash;
-    document.location.href = newUrl;
+    if (pathname !== basePath && pathname !== basePath + '/') {
+      document.location.href = newUrl;
+    }
   </script>
 </head>
 <body>
