@@ -87,16 +87,39 @@ AirtableMultiSelect.propTypes = {
 };
 const AirtableCheckbox = (checked) => <span>{checked ? "Yes" : "No"}</span>;
 
-const AirtableButton = ({ url, label }) => (
-  <Button>
-    <a href={url} target="_blank" rel="noopener noreferrer">
-      {label}
-    </a>
-  </Button>
-);
+const AirtableButton = ({ url, label }) => {
+  const handleClick = (event) => {
+    const { clientX, clientY, screenX, screenY } = event;
+    openInPopup({ url, mouseX: clientX, mouseY: clientY, screenX, screenY });
+  };
+  return <Button onClick={handleClick}>{label}</Button>;
+};
+
 AirtableButton.propTypes = {
   url: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+};
+
+/**
+ * Opens a URL in a popup window centered on the mouse position.
+ *
+ * @param {string} url - The URL to open.
+ * @param {number} mouseX - The X coordinate of the mouse click.
+ * @param {number} mouseY - The Y coordinate of the mouse click.
+ * @param {number} screenX - The X coordinate of the screen relative to the main screen.
+ * @param {number} screenY - The Y coordinate of the screen relative to the main screen.
+ */
+const openInPopup = ({ url, mouseX, mouseY, screenX, screenY }) => {
+  const height = 1024;
+  const width = 768;
+  const top = Math.round(screenY + mouseY - height / 2);
+  const left = Math.round(screenX + mouseX - width / 2);
+  const dimsStr = `width=${width}, height=${height}, top=${top}, left=${left}`;
+  window.open(
+    url,
+    "_blank",
+    `toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ${dimsStr}`,
+  );
 };
 
 export const AirtableEmail = ({ email }) => (
