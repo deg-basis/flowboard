@@ -59,6 +59,9 @@ const AppContent = () => {
     relativePath.split("/")[1] ||
     (airtableToken ? hasCredentialsDefaultPage : lacksCredentialsDefaultPage);
 
+  const isRootPath =
+    location.pathname === basePath + "/" || location.pathname === basePath;
+
   return (
     <Layout style={{ height: "100vh" }}>
       <Header className="header">
@@ -77,18 +80,20 @@ const AppContent = () => {
       </Header>
       <Content style={{ marginTop: 64, padding: "0 24px", background: "#fff" }}>
         <Routes>
-          <Route
-            path={urlOf("")}
-            element={
-              <Navigate
-                to={
-                  airtableToken
-                    ? urlOf(hasCredentialsDefaultPage)
-                    : urlOf(lacksCredentialsDefaultPage)
-                }
-              />
-            }
-          />
+          {isRootPath && (
+            <Route
+              path={urlOf("")}
+              element={
+                <Navigate
+                  to={
+                    airtableToken
+                      ? urlOf(hasCredentialsDefaultPage)
+                      : urlOf(lacksCredentialsDefaultPage)
+                  }
+                />
+              }
+            />
+          )}
           <Route path={urlOf("people")} element={<PeoplePage />} />
           <Route path={urlOf("companies")} element={<CompaniesPage />} />
           <Route path={urlOf("events")} element={<EventsPage />} />
