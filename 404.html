@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <title>Page Not Found</title>
-  <meta http-equiv="refresh" content="0; URL='/flowboard/'" />
   <script type="text/javascript">
-    // If JavaScript is enabled, the redirect happens immediately.
-    document.location.href = "/flowboard/";
+    var basePath = window.location.pathname.includes('/flowboard') ? '/flowboard' : '';
+    var pathname = window.location.pathname.replace(basePath, '');
+    var newUrl = basePath + pathname + window.location.search + window.location.hash;
+    document.location.href = newUrl;
   </script>
 </head>
 <body>
