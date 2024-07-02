@@ -49,6 +49,11 @@ const schema = {
     Status: { type: "singleSelect", width: 100 },
     Speakers: { type: ["record", "People"], width: 300 },
   },
+  "Authorized Users": {
+    "First Name": { type: "text", width: 150 },
+    "Last Name": { type: "text", width: 150 },
+    Email: { type: "email", width: 250 },
+  },
 };
 
 const ResizeableTitle = (props) => {

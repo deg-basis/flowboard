@@ -13,9 +13,10 @@ import {
   AirtableProvider,
   useAirtableContext,
 } from "./context/AirtableContext";
-import PeoplePage from "./pages/PeoplePage"; // Add this import
+import AuthorizedUsersPage from "./pages/AuthorizedUsersPage";
 import CompaniesPage from "./pages/CompaniesPage";
 import EventsPage from "./pages/EventsPage";
+import PeoplePage from "./pages/PeoplePage";
 import FunnelPage from "./pages/FunnelPage";
 import ConfigPage, {
   lacksCredentialsDefaultPage,
@@ -37,6 +38,10 @@ const menuItems = [
         label: <Link to={urlOf("companies")}>Companies</Link>,
       },
       { key: "events", label: <Link to={urlOf("events")}>Events</Link> },
+      {
+        key: "users",
+        label: <Link to={urlOf("users")}>Authorized Users</Link>,
+      },
     ],
   },
   { key: "funnel", label: <Link to={urlOf("funnel")}>Funnel</Link> },
@@ -97,6 +102,7 @@ const AppContent = () => {
           <Route path={urlOf("people")} element={<PeoplePage />} />
           <Route path={urlOf("companies")} element={<CompaniesPage />} />
           <Route path={urlOf("events")} element={<EventsPage />} />
+          <Route path={urlOf("users")} element={<AuthorizedUsersPage />} />
           <Route path={urlOf("funnel")} element={<FunnelPage />} />
           <Route path={urlOf("config")} element={<ConfigPage />} />
           <Route path={urlOf("help")} element={<HelpPage />} />
