@@ -35,7 +35,7 @@ Add yourself to the \`Authorized Users\` table of \`BT Events and Funnel\`
 * Navigate to the Developer Hub:
   * Click on your profile picture or initials in the top-right corner of the
     Airtable interface.
-  * Select "Developer hub" from the dropdown menu.
+  * Select “Developer hub” from the dropdown menu.
 
 * Enter a AirTable Personal Access Token:
   * Click on Config in Flowboard's main menu
@@ -46,7 +46,7 @@ Add yourself to the \`Authorized Users\` table of \`BT Events and Funnel\`
 
 We use a tool called [Fillout](https://www.fillout.com/) to create many of our
 pretty AirTable interfaces. To protect our data, these forms require one-time
-registrations. (And, unfortunately, sometimes they seem to "forget" and need
+registrations. (And, unfortunately, sometimes they seem to “forget” and need
 re-registration).
 
 When you get to one of these forms, you will be requested to enter your

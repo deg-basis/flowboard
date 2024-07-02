@@ -28,10 +28,14 @@ const markdownContent = `
 
 #### Generate a Personal Access Token:
 
-* In the Developer Hub, find the section for Personal Access Tokens.
-* Click on “Generate token” or a similar button.
+* In the Developer Hub, select the section “Personal Access Tokens”.
+* Click on “Create New Token”.
 * Follow the prompts to create a new Personal Access Token, specifying the
   scopes and bases you want to grant access to.
+  * Scope: [TBD] For now, I've selected all. This is probably overkill. (It's
+  likely enough to select \`data.records:read\`, \`data.records:write\`, and
+  \`schema.base:read\`)
+  * Base: Select only \`BT Events and Funnel\` (under \`BASISTECH\`)
 * Copy the generated token. This is your Personal Access Token.
 
 
