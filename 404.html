@@ -3,24 +3,10 @@
 <head>
   <meta charset="utf-8">
   <title>Page Not Found</title>
+  <meta http-equiv="refresh" content="0; URL='/flowboard/'" />
   <script type="text/javascript">
-    (function() {
-      // Determine if the current environment is localhost or production
-      var isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-      if (!isLocalhost) {
-        var basePath = '/flowboard';
-        
-        // Check if the current URL is already correct
-        if (!window.location.pathname.startsWith(basePath)) {
-          var pathname = window.location.pathname;
-          var newUrl = basePath + pathname + window.location.search + window.location.hash;
-
-          // Redirect to the new URL
-          window.location.replace(newUrl);
-        }
-      }
-    })();
+    // If JavaScript is enabled, the redirect happens immediately.
+    document.location.href = "/flowboard/";
   </script>
 </head>
 <body>
