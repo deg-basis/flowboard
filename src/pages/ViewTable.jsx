@@ -125,7 +125,7 @@ const ViewTable = ({ tableName }) => {
         key: key,
         sorter: getSorter(type, key),
         render: (value) =>
-          value ? <AirtableField type={type} value={value} /> : () => "",
+          value ? <AirtableField type={type} value={value} /> : "",
       };
     });
 

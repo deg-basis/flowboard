@@ -41,7 +41,6 @@ export const AirtableProvider = ({ children }) => {
 
     if (airtableToken) {
       try {
-        console.log("Fetching", tableName);
         fetchPromises[tableName] = fetchAirtableData(
           airtableToken,
           baseId,
