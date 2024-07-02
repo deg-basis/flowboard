@@ -17,7 +17,7 @@ import AuthorizedUsersPage from "./pages/AuthorizedUsersPage";
 import CompaniesPage from "./pages/CompaniesPage";
 import EventsPage from "./pages/EventsPage";
 import PeoplePage from "./pages/PeoplePage";
-import FunnelPage from "./pages/FunnelPage";
+import AddContactPage from "./pages/AddContactPage";
 import ConfigPage, {
   lacksCredentialsDefaultPage,
   hasCredentialsDefaultPage,
@@ -44,7 +44,10 @@ const menuItems = [
       },
     ],
   },
-  { key: "funnel", label: <Link to={urlOf("funnel")}>Funnel</Link> },
+  {
+    key: "add_contact",
+    label: <Link to={urlOf("add_contact")}>Add Contact</Link>,
+  },
   { key: "config", label: <Link to={urlOf("config")}>Config</Link> },
   { key: "help", label: <Link to={urlOf("help")}>Help</Link> },
 ];
@@ -103,7 +106,7 @@ const AppContent = () => {
           <Route path={urlOf("companies")} element={<CompaniesPage />} />
           <Route path={urlOf("events")} element={<EventsPage />} />
           <Route path={urlOf("users")} element={<AuthorizedUsersPage />} />
-          <Route path={urlOf("funnel")} element={<FunnelPage />} />
+          <Route path={urlOf("add_contact")} element={<AddContactPage />} />
           <Route path={urlOf("config")} element={<ConfigPage />} />
           <Route path={urlOf("help")} element={<HelpPage />} />
         </Routes>
