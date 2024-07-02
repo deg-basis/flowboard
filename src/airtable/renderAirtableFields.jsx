@@ -61,7 +61,8 @@ export const AirtableRecordId = ({ id, tableName }) => {
   };
 
   if (Array.isArray(id)) {
-    return id.map((r) => <OneTag key={r} id={r} />);
+    const ids = [...new Set(id)];
+    return ids.map((record) => <OneTag key={record} id={record} />);
   } else return <OneTag id={id} />;
 };
 AirtableRecordId.propTypes = {
@@ -98,7 +99,11 @@ const AirtableButton = ({ url, label }) => {
     const { clientX, clientY, screenX, screenY } = event;
     openInPopup({ url, mouseX: clientX, mouseY: clientY, screenX, screenY });
   };
-  return <Button onClick={handleClick}>{label}</Button>;
+  return (
+    <Button key={url} onClick={handleClick}>
+      {label}
+    </Button>
+  );
 };
 
 AirtableButton.propTypes = {
@@ -173,7 +178,7 @@ AirtableImage.propTypes = {
 export const AirtableField = ({ type, value }) => {
   if (Array.isArray(type)) {
     if (type[0] == "record") {
-      return <AirtableRecordId tableName={type[1]} id={value} />;
+      return <AirtableRecordId key={value} tableName={type[1]} id={value} />;
     } else return "";
   }
   switch (type) {
