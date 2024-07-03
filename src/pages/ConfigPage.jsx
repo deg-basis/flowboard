@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form, Input, Button, Typography, Divider } from "antd";
+import { Button, Divider, Form, Input, Typography } from "antd";
 import { useAirtableContext } from "../context/AirtableContext";
 import { useNavigate } from "react-router-dom";
 import { urlOf } from "../utils/deploymentUtils";
@@ -61,7 +61,7 @@ const ConfigPage = () => {
   };
 
   return (
-    <div>
+    <>
       <Markdown markdown={markdownContent} />
       <Divider />
       <Title level={3}>Enter token now:</Title>
@@ -89,7 +89,7 @@ const ConfigPage = () => {
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </>
   );
 };
 
