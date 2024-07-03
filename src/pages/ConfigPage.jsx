@@ -2,14 +2,10 @@ import { useState, useEffect } from "react";
 import { Button, Divider, Form, Input, Typography } from "antd";
 import { useAirtableContext } from "../context/AirtableContext";
 import { useNavigate } from "react-router-dom";
-import { urlOf } from "../utils/deploymentUtils";
 
 import Markdown from "../components/Markdown";
 
 const { Title } = Typography;
-
-export const lacksCredentialsDefaultPage = "config";
-export const hasCredentialsDefaultPage = "companies";
 
 const markdownContent = `
 ## Config
@@ -57,7 +53,7 @@ const ConfigPage = () => {
 
   const handleSubmit = () => {
     updateAirtableToken(token);
-    navigate(urlOf(hasCredentialsDefaultPage));
+    navigate("/");
   };
 
   return (

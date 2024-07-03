@@ -1,6 +1,6 @@
 import { Layout, Menu } from "antd";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Routes,
   Link,
@@ -18,12 +18,8 @@ import CompaniesPage from "./pages/CompaniesPage";
 import EventsPage from "./pages/EventsPage";
 import PeoplePage from "./pages/PeoplePage";
 import AddContactPage from "./pages/AddContactPage";
-import ConfigPage, {
-  lacksCredentialsDefaultPage,
-  hasCredentialsDefaultPage,
-} from "./pages/ConfigPage";
+import ConfigPage from "./pages/ConfigPage";
 import HelpPage from "./pages/HelpPage";
-import { urlOf } from "./utils/deploymentUtils";
 
 const { Header, Content } = Layout;
 
@@ -32,28 +28,28 @@ const menuItems = [
     key: "views",
     label: "Views",
     children: [
-      { key: "people", label: <Link to={urlOf("people")}>People</Link> },
+      { key: "people", label: <Link to={"people"}>People</Link> },
       {
         key: "companies",
-        label: <Link to={urlOf("companies")}>Companies</Link>,
+        label: <Link to={"companies"}>Companies</Link>,
       },
-      { key: "events", label: <Link to={urlOf("events")}>Events</Link> },
+      { key: "events", label: <Link to={"events"}>Events</Link> },
       {
         key: "users",
-        label: <Link to={urlOf("users")}>Authorized Users</Link>,
+        label: <Link to={"users"}>Authorized Users</Link>,
       },
     ],
   },
   {
     key: "add_contact",
-    label: <Link to={urlOf("add_contact")}>Add Contact</Link>,
+    label: <Link to={"add_contact"}>Add Contact</Link>,
   },
-  { key: "config", label: <Link to={urlOf("config")}>Config</Link> },
-  { key: "help", label: <Link to={urlOf("help")}>Help</Link> },
+  { key: "config", label: <Link to={"config"}>Config</Link> },
+  { key: "help", label: <Link to={"help"}>Help</Link> },
 ];
 
 const AppContent = () => {
-  const { airtableToken, initializing } = useAirtableContext();
+  const { initializing } = useAirtableContext();
   const location = useLocation();
 
   if (initializing) {
@@ -61,54 +57,31 @@ const AppContent = () => {
     return null;
   }
 
-  const basePath = urlOf("").replace(/\/$/, "");
-  const relativePath = location.pathname.replace(basePath, "");
-  const selectedKey =
-    relativePath.split("/")[1] ||
-    (airtableToken ? hasCredentialsDefaultPage : lacksCredentialsDefaultPage);
-
-  const isRootPath =
-    location.pathname === basePath + "/" || location.pathname === basePath;
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const selectedKeys = pathSegments.length > 0 ? pathSegments : ["help"];
 
   return (
     <Layout style={{ height: "100vh" }}>
       <Header className="header">
         <div className="logo">
           <img
-            src={urlOf("BasisTech.png")}
+            src={"BasisTech.png"}
             alt="BasisTech Logo"
             style={{ height: "31px", margin: "16px 24px 16px 0" }}
           />
         </div>
-        <Menu
-          mode="horizontal"
-          selectedKeys={[selectedKey]}
-          items={menuItems}
-        />
+        <Menu mode="horizontal" selectedKeys={selectedKeys} items={menuItems} />
       </Header>
       <Content style={{ marginTop: 64, padding: "0 24px", background: "#fff" }}>
         <Routes>
-          {isRootPath && (
-            <Route
-              path={urlOf("")}
-              element={
-                <Navigate
-                  to={
-                    airtableToken
-                      ? urlOf(hasCredentialsDefaultPage)
-                      : urlOf(lacksCredentialsDefaultPage)
-                  }
-                />
-              }
-            />
-          )}
-          <Route path={urlOf("people")} element={<PeoplePage />} />
-          <Route path={urlOf("companies")} element={<CompaniesPage />} />
-          <Route path={urlOf("events")} element={<EventsPage />} />
-          <Route path={urlOf("users")} element={<AuthorizedUsersPage />} />
-          <Route path={urlOf("add_contact")} element={<AddContactPage />} />
-          <Route path={urlOf("config")} element={<ConfigPage />} />
-          <Route path={urlOf("help")} element={<HelpPage />} />
+          <Route path="/" element={<HelpPage />} />
+          <Route path="people" element={<PeoplePage />} />
+          <Route path="companies" element={<CompaniesPage />} />
+          <Route path="events" element={<EventsPage />} />
+          <Route path="users" element={<AuthorizedUsersPage />} />
+          <Route path="add_contact" element={<AddContactPage />} />
+          <Route path="config" element={<ConfigPage />} />
+          <Route path="help" element={<HelpPage />} />
         </Routes>
       </Content>
     </Layout>
